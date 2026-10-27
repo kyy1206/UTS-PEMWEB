@@ -1,0 +1,28 @@
+CREATE DATABASE IF NOT EXISTS kegiatan_mahasiswa_2401020035
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+
+USE kegiatan_mahasiswa_2401020035;
+
+CREATE TABLE jenis_kegiatan (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nama_jenis VARCHAR(100) NOT NULL UNIQUE
+) ENGINE=InnoDB;
+
+CREATE TABLE kegiatan (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    kode_kegiatan CHAR(10) NOT NULL UNIQUE,
+    nama_kegiatan VARCHAR(100) NOT NULL,
+    email_pic VARCHAR(100) NOT NULL UNIQUE,
+    kuota SMALLINT UNSIGNED NOT NULL,
+    jenis_kegiatan_id BIGINT UNSIGNED NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_kegiatan_jenis_kegiatan
+        FOREIGN KEY (jenis_kegiatan_id)
+        REFERENCES jenis_kegiatan(id)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT,
+    CONSTRAINT chk_kuota
+        CHECK (kuota BETWEEN 10 AND 200)
+) ENGINE=InnoDB;
